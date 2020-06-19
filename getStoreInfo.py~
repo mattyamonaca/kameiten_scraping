@@ -176,6 +176,5 @@ def getStoreInfos(gc,start):
 if __name__ == "__main__":
     df =  getStoreInfos("01","1")
     print(df)
-    with open("sample_output.csv",mode="w",encoding="cp932",errors="ignore") as f:
-        df.to_csv(f)
+    df.to_csv("sample_output.csv",encoding = "shift-jis")
 
