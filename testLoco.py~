@@ -110,7 +110,7 @@ def getStoreInfos(gc,ac,start):
         else:
             address_list.append(None)
 
-        if "Station" in property.keys() and len(element["Property"]["Station"]) > 0:
+        if "Station" in property.keys():
             station = element["Property"]["Station"][0]
             station_id_list.append(station["Id"])
             station_name_list.append(station["Name"])
