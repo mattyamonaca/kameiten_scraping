@@ -15,9 +15,21 @@ result = pd.concat(df_list)
 
 dup = len(result[result["id"].duplicated()])
 length = len(result)
+
+print("--- 重複削除前 ---")
 print("データ総数 : {}".format(length))
 print("重複件数 : {}".format(dup))
 
-with open("output_{}.csv".format(conf["prefecture"]),mode="w",encoding="cp932",errors="ignore") as f:                                                                                                           
-        result.to_csv(f) 
+
+result = result[~result.duplicated()]
+
+dup = len(result[result["id"].duplicated()])
+length = len(result)
+
+print("--- 重複削除後 ---")
+print("データ総数 : {}".format(length))
+print("重複件数 : {}".format(dup))
+
+with open("output/output_{}.csv".format(conf["prefecture"]),mode="w",encoding="cp932",errors="ignore") as f:                                                                                                           
+        result.to_csv(f,index=None) 
 

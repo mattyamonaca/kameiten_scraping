@@ -5,6 +5,8 @@ import pandas as pd
 import codecs
 import time
 import yaml
+
+from tqdm import tqdm
 #appid = "dj00aiZpPU9lblRWbnBmYU9SOSZzPWNvbnN1bWVyc2VjcmV0Jng9ZTI-"
 
 
@@ -60,7 +62,7 @@ def getStoreInfos(gc,ac,start):
    
     url = "https://map.yahoo.co.jp/api/localsearch?" + parse.urlencode(payload) + "&gid={}".format(gid)
 
-    print(url)
+    #print(url)
 
     response = requests.get(url)
     #shop_num = response.count('id')
@@ -69,7 +71,8 @@ def getStoreInfos(gc,ac,start):
    
     elements = json.loads(json_f)
 
-    #print(elements["Feature"][0])
+    
+#print(elements)
     if "Feature" not in elements.keys():
         return None
 
@@ -194,8 +197,12 @@ if __name__ == "__main__":
         conf = yaml.safe_load(f)
     print(conf)
 
+    genre_cd = pd.read_csv("./genre.csv")
+
     #gc取得
-    gc_list = ["01", "02", "03", "04"]
+#    gc_list = ["01", "02", "03", "04"]
+    gc_list = genre_cd["業種コード2"].unique().tolist()
+    print(gc_list)
     
     #ac取得
     path = "./zenkoku.csv"
@@ -225,7 +232,12 @@ if __name__ == "__main__":
                 print("gc : {} skip".format(gc))
                 continue
 
-        for ac in ac_list:
+        if len(str(gc)) < 4:
+            gc = "0" + str(gc)
+
+        print("gc : {}".format(gc))
+        for ac in tqdm(ac_list):
+            area_count = 1
             if len(str(ac)) < 5:
                 ac = "0" + str(ac)
 
@@ -247,20 +259,21 @@ if __name__ == "__main__":
 
             #データ取得
             while(True):
-                print(start)
-                time.sleep(1)
-                df =  getStoreInfos(gc,ac,start)
+#                print(start)
+                #time.sleep(1)
+                df =  getStoreInfos(str(gc),ac,start)
                 if df is not None :
                     df_list.append(df)
                     tmp_list.append(df)
                 else:
                     break
-                    
+                
+#                print(df)
 
                 count += 1
                 if count % 10 == 0:
                     tmp_result = pd.concat(tmp_list)
-                    print(tmp_result)
+                    #print(tmp_result)
                     with open("./tmp/{}_{}_{}.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
                         tmp_result.to_csv(f)
 
@@ -278,7 +291,12 @@ if __name__ == "__main__":
                 if len(df) < 100:
                     break
                 start += 100
-               
+                area_count += 100
+                
+                #area_cd一つにつき上限が1万件
+                if area_count > 10000:
+                    area_count = 0
+                    break
     #result = pd.concat(df_list)
     #print(result)
     #with open("hokkaido.csv",mode="w",encoding="cp932",errors="ignore") as f:
