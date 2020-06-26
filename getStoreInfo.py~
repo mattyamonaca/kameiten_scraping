@@ -71,7 +71,8 @@ def getStoreInfos(gc,ac,start):
    
     elements = json.loads(json_f)
 
-    print(elements)
+    
+#print(elements)
     if "Feature" not in elements.keys():
         return None
 

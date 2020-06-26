@@ -260,7 +260,7 @@ if __name__ == "__main__":
             #データ取得
             while(True):
 #                print(start)
-                #time.sleep(1)
+                time.sleep(1)
                 df =  getStoreInfos(str(gc),ac,start)
                 if df is not None :
                     df_list.append(df)
