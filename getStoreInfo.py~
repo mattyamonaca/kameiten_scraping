@@ -301,6 +301,7 @@ def run(conf,prefecture):
                     area_count = 0
                     break
 #イカテスト
+                break
             break
         break
 #

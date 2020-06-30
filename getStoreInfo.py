@@ -300,11 +300,6 @@ def run(conf,prefecture):
                 if area_count > 10000:
                     area_count = 0
                     break
-#イカテスト
-                break
-            break
-        break
-#
 
     #result = pd.concat(df_list)
     #print(result)
