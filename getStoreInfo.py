@@ -191,11 +191,12 @@ def getStoreInfos(gc,ac,start):
     return df
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
-    with open("./conf.yaml") as f:
-        conf = yaml.safe_load(f)
-    print(conf)
+def run(conf,prefecture):
+    #with open("./conf.yaml") as f:
+    #    conf = yaml.safe_load(f)
+    #print(conf)
 
     genre_cd = pd.read_csv("./genre.csv")
 
@@ -214,7 +215,7 @@ if __name__ == "__main__":
         # ac_list = list(a_cd.unique().tolist())
     #print(conf)
 
-    prefecture = int(conf["prefecture"])
+    #prefecture = int(conf["prefecture"])
     df_1 = j_cd[j_cd['都道府県CD'] == prefecture]
     df_2 = df_1['市区町村CD']
     ac_list = list(df_2.unique().tolist())
@@ -276,7 +277,7 @@ if __name__ == "__main__":
                 #if count % 10 == 0:
                 tmp_result = df #pd.concat(tmp_list)
                 #print(tmp_result)
-                with open("./tmp/{}_{}_{}.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
+                with open("./tmp/code_{}/{}_{}_{}.csv".format(prefecture,gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
                     tmp_result.to_csv(f,index=False)
 
 
@@ -299,8 +300,32 @@ if __name__ == "__main__":
                 if area_count > 10000:
                     area_count = 0
                     break
+#イカテスト
+                break
+            break
+        break
+#
+
     #result = pd.concat(df_list)
     #print(result)
     #with open("hokkaido.csv",mode="w",encoding="cp932",errors="ignore") as f:
     #    result.to_csv(f)
+
+if __name__ == "__main__":   
+    with open("./conf.yaml") as f:
+        conf = yaml.safe_load(f)
+    print(conf)
+
+    prefecture = conf["prefecture"]
+    
+    if prefecture == "all":
+        prefecture_df = pd.read_csv("./prefecture_list.csv")
+        prefecture_list = prefecture_df["Code"]
+        for cd in prefecture_list:
+            #print(cd)
+            run(conf,int(cd))
+    else:
+        run(conf,int(prefecture))
+
+
 

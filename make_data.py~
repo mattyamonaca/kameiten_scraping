@@ -1,35 +1,51 @@
-import os
+]import os
 import pandas as pd
 import yaml
 
-file_list = os.listdir(path = "./tmp/")
+#file_list = os.listdir(path = "./tmp/")
 with open("./conf.yaml") as f:
     conf = yaml.safe_load(f)
 
-df_list = []
-for name in file_list:
-    df = pd.read_csv("./tmp/" + name,encoding="cp932")
-    df_list.append(df)
 
-result = pd.concat(df_list)
+def remove_duplicate(cd):
+    file_list = os.listdir(path = "./tmp/code_{}".format(cd))
+    df_list = []
+    for name in file_list:
+        df = pd.read_csv("./tmp/code_{}/".format(cd) + name,encoding="cp932")
+        df_list.append(df)
 
-dup = len(result[result["id"].duplicated()])
-length = len(result)
+    result = pd.concat(df_list)
 
-print("--- 重複削除前 ---")
-print("データ総数 : {}".format(length))
-print("重複件数 : {}".format(dup))
+    dup = len(result[result["id"].duplicated()])
+    length = len(result)
+
+    print("--- 重複削除前 ---")
+    print("データ総数 : {}".format(length))
+    print("重複件数 : {}".format(dup))
 
 
-result = result[~result.duplicated()]
+    result = result[~result.duplicated(subset="id")]
 
-dup = len(result[result["id"].duplicated()])
-length = len(result)
+    dup = len(result[result["id"].duplicated()])
+    length = len(result)
 
-print("--- 重複削除後 ---")
-print("データ総数 : {}".format(length))
-print("重複件数 : {}".format(dup))
+    print("--- 重複削除後 ---")
+    print("データ総数 : {}".format(length))
+    print("重複件数 : {}".format(dup))
 
-with open("output/output_{}.csv".format(conf["prefecture"]),mode="w",encoding="cp932",errors="ignore") as f:                                                                                                           
-        result.to_csv(f,index=None) 
+    return result
+
+
+if conf["prefecture"] == "all":
+    prefecture_df = pd.read_csv("./prefecture_list.csv")
+    prefecture_list = prefecture_df["Code"]
+    for cd in prefecture_list:
+        result = remove_duplicate(cd)
+        with open("output/output_{}.csv".format(cd),mode="w",encoding="cp932",errors="ignore") as f:                                   
+            result.to_csv(f,index=None)
+else:
+    result = remove_duplicate(conf["prefecture"])
+    with open("output/output_{}.csv".format(conf["prefecture"]),mode="w",encoding="cp932",errors="ignore") as f:                                   
+        result.to_csv(f,index=None)
+
 
