@@ -203,6 +203,8 @@ if __name__ == "__main__":
 #    gc_list = ["01", "02", "03", "04"]
     gc_list = genre_cd["業種コード2"].unique().tolist()
     print(gc_list)
+    print("gc総数 {}".format(len(gc_list)))
+    
     
     #ac取得
     path = "./zenkoku.csv"
@@ -260,7 +262,7 @@ if __name__ == "__main__":
             #データ取得
             while(True):
 #                print(start)
-                time.sleep(1)
+                time.sleep(0.5)
                 df =  getStoreInfos(str(gc),ac,start)
                 if df is not None :
                     df_list.append(df)
@@ -271,22 +273,22 @@ if __name__ == "__main__":
 #                print(df)
 
                 count += 1
-                if count % 10 == 0:
-                    tmp_result = pd.concat(tmp_list)
-                    #print(tmp_result)
-                    with open("./tmp/{}_{}_{}.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
-                        tmp_result.to_csv(f)
+                #if count % 10 == 0:
+                tmp_result = df #pd.concat(tmp_list)
+                #print(tmp_result)
+                with open("./tmp/{}_{}_{}.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
+                    tmp_result.to_csv(f,index=False)
 
 
-                    log_df = pd.DataFrame({
+                log_df = pd.DataFrame({
                             "gc" :[gc],
                             "ac" :[ac],
                             "start" : [start]
                             })
-                    with open("./log/log.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
+                with open("./log/log.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
                         log_df.to_csv(f)
 
-                    tmp_list = []
+                #tmp_list = []
 
                 if len(df) < 100:
                     break

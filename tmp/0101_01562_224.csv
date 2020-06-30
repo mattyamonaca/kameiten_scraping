@@ -1,0 +1,3 @@
+id,gid,name,latitude,longitude,address,satation_id,station_name,station_distance,station_time,genre_code,genre_name,review_count,access,paypay_flg
+100000318753,3qoG4edsV5U,はるちゃん,44.32796444,142.94633064,北海道紋別郡西興部村西興部108,,,,,0110,居酒屋、ビアホール,,,False
+20130387698,vA-HQhXo5ZM,レストラングリンリーフ,44.330550277778,142.947580555556,北海道紋別郡西興部村字西興部４９２,,,,,0101053,和食（その他）,1,,False
