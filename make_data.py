@@ -16,7 +16,7 @@ def remove_duplicate(cd):
 
     result = pd.concat(df_list)
 
-    dup = len(result[result["id"].duplicated()])
+    dup = len(result[result.duplicated()])
     length = len(result)
 
     print("--- 重複削除前 ---")
@@ -24,9 +24,9 @@ def remove_duplicate(cd):
     print("重複件数 : {}".format(dup))
 
 
-    result = result[~result.duplicated(subset="id")]
+    result.drop_duplicates(inplace=True)
 
-    dup = len(result[result["id"].duplicated()])
+    dup = len(result[result.duplicated()])
     length = len(result)
 
     print("--- 重複削除後 ---")
