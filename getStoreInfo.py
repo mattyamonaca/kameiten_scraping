@@ -286,7 +286,7 @@ def run(conf,prefecture):
                     #if count % 10 == 0:
                     tmp_result = df #pd.concat(tmp_list)
                     #print(tmp_result)
-                    with open(file_name,mode="w",encoding=conf["encode"],errors="ignore") as f:
+                    with open(output_dir+file_name,mode="w",encoding=conf["encode"],errors="ignore") as f:
                         tmp_result.to_csv(f,index=False)
 
 
