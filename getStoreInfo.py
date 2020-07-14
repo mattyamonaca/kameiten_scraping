@@ -263,6 +263,7 @@ def run(conf,prefecture):
             #データ取得
             while(True):
 #                print(start)
+                file_name = "./tmp/code_{}/{}_{}_{}.csv".format(prefecture,gc,ac,start)
                 time.sleep(0.5)
                 df =  getStoreInfos(str(gc),ac,start)
                 if df is not None :
@@ -277,7 +278,7 @@ def run(conf,prefecture):
                 #if count % 10 == 0:
                 tmp_result = df #pd.concat(tmp_list)
                 #print(tmp_result)
-                with open("./tmp/code_{}/{}_{}_{}.csv".format(prefecture,gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
+                with open(file_name,mode="w",encoding=conf["encode"],errors="ignore") as f:
                     tmp_result.to_csv(f,index=False)
 
 
