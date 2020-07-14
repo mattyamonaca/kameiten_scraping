@@ -257,12 +257,7 @@ def run(conf,prefecture):
             else:
                 ac_restart_flg = False
  
-            if conf["start"] != "":
-                start = int(conf["start"])
-                print("restart : {}".format(start))
-            else:
-                start = 1
-
+            start = 1
             #データ取得
             while(True):
 #                print(start)
