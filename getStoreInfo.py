@@ -227,6 +227,8 @@ def run(conf,prefecture):
 
     count = 0
 
+    output_dir = "./tmp/code_{}/".format(prefecture)
+    os.makedirs(output_dir, exist_ok=True)
 
     ac_restart_flg = True
     for gc in gc_list:
@@ -264,9 +266,7 @@ def run(conf,prefecture):
             #データ取得
             while(True):
 #                print(start)
-                output_dir = "./tmp/code_{}/".format(prefecture)
                 file_name = "{}_{}_{}.csv".format(gc,ac,start)
-                os.makedirs(output_dir, exist_ok=True)
                 # 出力ファイルが存在したらスキップ
                 if file_name in os.listdir(output_dir):
                     pass
