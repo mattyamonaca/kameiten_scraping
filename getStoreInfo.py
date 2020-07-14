@@ -5,6 +5,7 @@ import pandas as pd
 import codecs
 import time
 import yaml
+import os
 
 from tqdm import tqdm
 #appid = "dj00aiZpPU9lblRWbnBmYU9SOSZzPWNvbnN1bWVyc2VjcmV0Jng9ZTI-"
@@ -263,37 +264,44 @@ def run(conf,prefecture):
             #データ取得
             while(True):
 #                print(start)
-                file_name = "./tmp/code_{}/{}_{}_{}.csv".format(prefecture,gc,ac,start)
-                time.sleep(0.5)
-                df =  getStoreInfos(str(gc),ac,start)
-                if df is not None :
-                    df_list.append(df)
-                    tmp_list.append(df)
+                output_dir = "./tmp/code_{}/".format(prefecture)
+                file_name = "{}_{}_{}.csv".format(gc,ac,start)
+                # 出力ファイルが存在したらスキップ
+                if file_name in os.listdir(output_dir):
+                    pass
+                # 無かったら問い合わせて出力
                 else:
-                    break
+                    time.sleep(0.5)
+                    df =  getStoreInfos(str(gc),ac,start)
+                    if df is not None :
+                        df_list.append(df)
+                        tmp_list.append(df)
+                    else:
+                        break
+                    
+    #                print(df)
+
+                    count += 1
+                    #if count % 10 == 0:
+                    tmp_result = df #pd.concat(tmp_list)
+                    #print(tmp_result)
+                    with open(file_name,mode="w",encoding=conf["encode"],errors="ignore") as f:
+                        tmp_result.to_csv(f,index=False)
+
+
+                    log_df = pd.DataFrame({
+                                "gc" :[gc],
+                                "ac" :[ac],
+                                "start" : [start]
+                                })
+                    with open("./log/log.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
+                            log_df.to_csv(f)
+
+                    #tmp_list = []
+
+                    if len(df) < 100:
+                        break
                 
-#                print(df)
-
-                count += 1
-                #if count % 10 == 0:
-                tmp_result = df #pd.concat(tmp_list)
-                #print(tmp_result)
-                with open(file_name,mode="w",encoding=conf["encode"],errors="ignore") as f:
-                    tmp_result.to_csv(f,index=False)
-
-
-                log_df = pd.DataFrame({
-                            "gc" :[gc],
-                            "ac" :[ac],
-                            "start" : [start]
-                            })
-                with open("./log/log.csv".format(gc,ac,count),mode="w",encoding=conf["encode"],errors="ignore") as f:
-                        log_df.to_csv(f)
-
-                #tmp_list = []
-
-                if len(df) < 100:
-                    break
                 start += 100
                 area_count += 100
                 
