@@ -266,6 +266,7 @@ def run(conf,prefecture):
 #                print(start)
                 output_dir = "./tmp/code_{}/".format(prefecture)
                 file_name = "{}_{}_{}.csv".format(gc,ac,start)
+                os.makedirs(output_dir, exist_ok=True)
                 # 出力ファイルが存在したらスキップ
                 if file_name in os.listdir(output_dir):
                     pass
